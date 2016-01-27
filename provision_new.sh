@@ -6,20 +6,20 @@ key="$1"
 case $key in
 
 	# variables
-    --configBucket)
-    configBucket="$2"
+    --configbucket)
+    configbucket="$2"
     shift # past argument
     ;;
-    --imagesBucket)
-    imagesBucket="$2"
+    --imagesbucket)
+    imagesbucket="$2"
     shift # past argument
     ;;
-    --themesBucket)
-    themesBucket="$2"
+    --themesbucket)
+    themesbucket="$2"
     shift # past argument
     ;;
-    --uploadsBucket)
-    uploadsBucket="$2"
+    --uploadsbucket)
+    uploadsbucket="$2"
     shift # past argument
     ;;
     --dbname)
@@ -109,10 +109,8 @@ esac
 shift # past argument or value
 done
 
-yum update -y
-
 # Install web and dev dependencies
-yum install -y httpd php mysql-server php-mysqlnd php-pear php-pecl-memcache php-gd git
+yum install -y httpd php mysql-server php-mysqlnd php-pear php-pecl-memcache php-gd
 service httpd start
 chkconfig httpd on
 
@@ -140,25 +138,25 @@ sudo make install
 # Set uploads to S3
 mkdir /var/www/html/uploads-temp
 mv /var/www/html/uploads/* /var/www/html/uploads-temp/
-s3fs $uploadsBucket /var/www/html/uploads -o iam_role=default-role,rw,nosuid,nodev,allow_other,stat_cache_expire=1
+s3fs $uploadsbucket /var/www/html/uploads -o iam_role=default-role,rw,nosuid,nodev,allow_other,stat_cache_expire=1
 mv /var/www/html/uploads-temp/* /var/www/html/uploads/
 rm -rf /var/www/html/uploads-temp/
 
 # Set themes to S3
 mkdir /var/www/html/cache/themes-temp
 mv /var/www/html/cache/themes/* /var/www/html/cache/themes-temp/
-s3fs $themesBucket /var/www/html/cache/themes -o iam_role=default-role,rw,nosuid,nodev,allow_other,stat_cache_expire=1
+s3fs $themesbucket /var/www/html/cache/themes -o iam_role=default-role,rw,nosuid,nodev,allow_other,stat_cache_expire=1
 mv /var/www/html/cache/themes-temp/* /var/www/html/cache/themes/
 rm -rf /var/www/html/cache/themes-temp/
 
 # Set images to S3
 mkdir /var/www/html/images-temp
 mv /var/www/html/images/* /var/www/html/images-temp/
-s3fs $imagesBucket /var/www/html/images -o iam_role=default-role,rw,nosuid,nodev,allow_other,stat_cache_expire=1
+s3fs $imagesbucket /var/www/html/images -o iam_role=default-role,rw,nosuid,nodev,allow_other,stat_cache_expire=1
 mv /var/www/html/images-temp/* /var/www/html/images/
 rm -rf /var/www/html/images-temp/
 
-python create_tables.py --dbhost $dbhost --dbengine $dbengine --dbuser $dbuser --dbpass $dbpass --dbname $dbname --tableprefix $tableprefix
+python create_tables.py --dbhost $dbhost --dbengine mysqli --dbuser $dbuser --dbpass $dbpass --dbname $dbname --tableprefix $tableprefix
 python configure_board.py --bbname $bbname --bburl $bburl --websitename $websitename --websiteurl $websiteurl --cookiedomain $cookiedomain --cookiepath $cookiepath --contactemail $contactemail --pin $pin --adminuser $adminuser --adminpass $adminpass --adminemail $adminemail
 
 # Complete web config.
@@ -172,7 +170,7 @@ find /var/www -type f -exec chmod 0664 {} +
 rm -Rf install
 
 # Copy config from S3.
-aws s3 cp /var/www/html/inc/config.php s3://$configBucket/config.php
+aws s3 cp /var/www/html/inc/config.php s3://$configbucket/config.php
 cd /var/www/
 zip -r mybb.zip html -x "html/images/*" -x "html/uploads/*" -x "html/cache/themes/*"
-aws s3 cp mybb.zip s3://$configBucket/mybb.zip
+aws s3 cp mybb.zip s3://$configbucket/mybb.zip

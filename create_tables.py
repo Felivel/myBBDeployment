@@ -33,7 +33,7 @@ payload['config[sqlite][tableprefix]'] = ''
 payload['action'] = 'create_tables'
 
 r = requests.post(url, payload)
-if r.status_code = 200:
+if r.status_code == 200:
 	print "Tables created sucessfully."
 else:
 	print r.status_code
@@ -42,7 +42,7 @@ else:
 # Populate tables
 payload = {'action':'populate_tables'}
 r = requests.post(url, payload)
-if r.status_code = 200:
+if r.status_code == 200:
 	print "Tables populated sucessfully."
 else:
 	print r.status_code
@@ -50,14 +50,14 @@ else:
 # Install Theme
 payload = {'action':'templates'}
 r = requests.post(url, payload)
-if r.status_code = 200:
+if r.status_code == 200:
 	print "Themes installed sucessfully."
 else:
 	print r.status_code
 
 payload = {'action':'configuration'}
 r = requests.post(url, payload)
-if r.status_code = 200
+if r.status_code == 200:
 	print "Configuration created sucessfully."
 else:
 	print r.status_code

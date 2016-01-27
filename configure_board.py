@@ -28,9 +28,13 @@ payload['websiteurl'] = args.websiteurl
 payload['cookiedomain'] = args.cookiedomain
 payload['cookiepath'] = args.cookiepath
 payload['contactemail'] = args.contactemail 
-payload['pin'] = args.ping
+payload['pin'] = args.pin
 payload['action'] = 'adminuser'
 r = requests.post(url, payload)
+if r.status_code == 200:
+	print "Board created sucessfully."
+else:
+	print r.status_code
 
 # Create admin
 payload = {}
@@ -39,3 +43,14 @@ payload['adminpass'] = args.adminpass
 payload['adminpass2]'] = args.adminpass
 payload['adminemail'] = args.adminemail
 r = requests.post(url, payload)
+if r.status_code == 200:
+	print "Site admin created sucessfully."
+else:
+	print r.status_code
+
+payload = {'action':'final'}
+r = requests.post(url, payload)
+if r.status_code == 200:
+	print "Install Done."
+else:
+	print r.status_code

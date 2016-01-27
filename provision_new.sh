@@ -156,8 +156,8 @@ s3fs $imagesbucket /var/www/html/images -o iam_role=default-role,rw,nosuid,nodev
 mv /var/www/html/images-temp/* /var/www/html/images/
 rm -rf /var/www/html/images-temp/
 
-python create_tables.py --dbhost $dbhost --dbengine mysqli --dbuser $dbuser --dbpass $dbpass --dbname $dbname --tableprefix $tableprefix
-python configure_board.py --bbname $bbname --bburl $bburl --websitename $websitename --websiteurl $websiteurl --cookiedomain $cookiedomain --cookiepath $cookiepath --contactemail $contactemail --pin $pin --adminuser $adminuser --adminpass $adminpass --adminemail $adminemail
+python /var/myBBDeployment/create_tables.py --dbhost $dbhost --dbengine mysqli --dbuser $dbuser --dbpass $dbpass --dbname $dbname --tableprefix $tableprefix
+python /var/myBBDeployment/configure_board.py --bbname $bbname --bburl $bburl --websitename $websitename --websiteurl $websiteurl --cookiedomain $cookiedomain --cookiepath $cookiepath --contactemail $contactemail --pin $pin --adminuser $adminuser --adminpass $adminpass --adminemail $adminemail
 
 # Complete web config.
 groupadd www
